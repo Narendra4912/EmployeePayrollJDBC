@@ -5,18 +5,26 @@ public class EmployeeService {
 
         EmployeeService employeeService = new EmployeeService();
         //employeeService.retrieveData();
-        employeeService.updateDate("Sanket",30000.0);
+        //employeeService.updateData("Sanket",30000.0);
+        employeeService.updateDataUsingPreparedStatement("Sanket",30000.0);
+
     }
 
-    private void updateDate(String empName, double salary) {
+    private void updateDataUsingPreparedStatement(String empName, double salary) {
 
         EmployeeModule employeeModule = new EmployeeModule();
-        employeeModule.updateDate(empName,salary);
+        employeeModule.updateDataUsingPreparedStatement(empName,salary);
+    }
+
+    private void updateData(String empName, double salary) {
+
+        EmployeeModule employeeModule = new EmployeeModule();
+        employeeModule.updateData(empName,salary);
     }
 
     private void retrieveData() {
 
         EmployeeModule employeeModule = new EmployeeModule();
-        System.out.println(employeeModule.retrieveDate());
+        System.out.println(employeeModule.retrieveData());
     }
 }

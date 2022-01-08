@@ -21,7 +21,7 @@ public class EmployeeModule {
 
         return connection;
     }
-    public List<Employee> retrieveDate() {
+    public List<Employee> retrieveData() {
 
         List<Employee> employeeList = new ArrayList<>();
 
@@ -50,7 +50,7 @@ public class EmployeeModule {
         return employeeList;
     }
 
-    public void updateDate(String empName, double salary) {
+    public void updateData(String empName, double salary) {
         try (Connection connection = getConnection()) {
             Statement statement = connection.createStatement();
             String query = String.format("update employee_payroll set salary = %.2f where empName = '%s'",salary,empName);
@@ -61,5 +61,20 @@ public class EmployeeModule {
             e.printStackTrace();
         }
 
+    }
+
+    public void updateDataUsingPreparedStatement(String empName, double salary) {
+
+        try (Connection connection = getConnection()) {
+            String query = "update employee_payroll set salary = ? where empName = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setDouble(1,salary);
+            preparedStatement.setString(2,empName);
+            int result = preparedStatement.executeUpdate();
+            if(result >= 1)
+                System.out.println("Employee Record Updated Successfully !!!");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
