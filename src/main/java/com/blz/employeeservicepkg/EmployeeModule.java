@@ -21,6 +21,7 @@ public class EmployeeModule {
 
         return connection;
     }
+
     public List<Employee> retrieveData() {
 
         List<Employee> employeeList = new ArrayList<>();
@@ -76,5 +77,30 @@ public class EmployeeModule {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public Employee retrieveDataUsingPreparedStatement(String empName) {
+
+        Employee employee = new Employee();
+
+        try (Connection connection = getConnection()) {
+            String query = "select * from employee_payroll where empName = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1,empName);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                employee.setEmpId(resultSet.getInt("empId"));
+                employee.setEmpName(resultSet.getString("empName"));
+                employee.setAddress(resultSet.getString("address"));
+                employee.setPhoneNo(resultSet.getLong("phoneNo"));
+                employee.setGender(resultSet.getString("gender").charAt(0));
+                employee.setDepartment(resultSet.getString("department"));
+                employee.setStartDate(resultSet.getDate("startDate"));
+                employee.setSalary(resultSet.getDouble("salary"));
+            }
+        } catch (SQLException e) {
+        }
+
+        return employee;
     }
 }

@@ -6,8 +6,15 @@ public class EmployeeService {
         EmployeeService employeeService = new EmployeeService();
         //employeeService.retrieveData();
         //employeeService.updateData("Sanket",30000.0);
-        employeeService.updateDataUsingPreparedStatement("Sanket",30000.0);
+        //employeeService.updateDataUsingPreparedStatement("Sanket",30000.0);
+        employeeService.retrieveDataUsingPreparedStatement("Narendra");
 
+    }
+
+    private void retrieveDataUsingPreparedStatement(String empName) {
+
+        EmployeeModule employeeModule = new EmployeeModule();
+        System.out.println(employeeModule.retrieveDataUsingPreparedStatement(empName));
     }
 
     private void updateDataUsingPreparedStatement(String empName, double salary) {
