@@ -49,4 +49,17 @@ public class EmployeeModule {
 
         return employeeList;
     }
+
+    public void updateDate(String empName, double salary) {
+        try (Connection connection = getConnection()) {
+            Statement statement = connection.createStatement();
+            String query = String.format("update employee_payroll set salary = %.2f where empName = '%s'",salary,empName);
+            int result = statement.executeUpdate(query);
+            if(result >= 1)
+                System.out.println("Employee Record Updated Successfully !!!");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
 }
