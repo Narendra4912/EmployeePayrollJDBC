@@ -56,9 +56,9 @@ public class EmployeeModule {
     public void updateData(String empName, double salary) {
         try (Connection connection = getConnection()) {
             Statement statement = connection.createStatement();
-            String query = String.format("update employee_payroll set salary = %.2f where empName = '%s'",salary,empName);
+            String query = String.format("update employee_payroll set salary = %.2f where empName = '%s'", salary, empName);
             int result = statement.executeUpdate(query);
-            if(result >= 1)
+            if (result >= 1)
                 System.out.println("Employee Record Updated Successfully !!!");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -71,10 +71,10 @@ public class EmployeeModule {
         try (Connection connection = getConnection()) {
             String query = "update employee_payroll set salary = ? where empName = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setDouble(1,salary);
-            preparedStatement.setString(2,empName);
+            preparedStatement.setDouble(1, salary);
+            preparedStatement.setString(2, empName);
             int result = preparedStatement.executeUpdate();
-            if(result >= 1)
+            if (result >= 1)
                 System.out.println("Employee Record Updated Successfully !!!");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -88,7 +88,7 @@ public class EmployeeModule {
         try (Connection connection = getConnection()) {
             String query = "select * from employee_payroll where empName = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1,empName);
+            preparedStatement.setString(1, empName);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 employee.setEmpId(resultSet.getInt("empId"));
@@ -137,5 +137,26 @@ public class EmployeeModule {
         }
 
         return employeeList;
+    }
+
+    public void retrieveSpecificDataUsingFunctionAndGroupBy() {
+
+        try (Connection connection = getConnection()) {
+            Statement statement = connection.createStatement();
+            String query = "select gender,count(gender),sum(salary),avg(salary),min(salary),max(salary) " +
+                    "from employee_payroll group by gender";
+            ResultSet resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                System.out.print("Gender = " + resultSet.getString(1).charAt(0) + " ");
+                System.out.print("Count = " + resultSet.getInt(2) + " ");
+                System.out.print("Sum = " + resultSet.getInt(3) + " ");
+                System.out.print("Avg = " + resultSet.getInt(4) + " ");
+                System.out.print("Min = " + resultSet.getInt(5) + " ");
+                System.out.print("Max = " + resultSet.getInt(6) + " ");
+                System.out.println();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
