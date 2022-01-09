@@ -1,7 +1,9 @@
 package com.blz.employeeservicepkg;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class EmployeeModule {
@@ -102,5 +104,38 @@ public class EmployeeModule {
         }
 
         return employee;
+    }
+
+    public List<Employee> retrieveDataUsingPreparedStatementForDateRange(Date date1, Date date2) {
+
+        List<Employee> employeeList = new ArrayList<>();
+
+        try (Connection connection = getConnection()) {
+            String query = "select * from employee_payroll where startDate between ? and ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            java.sql.Date sqlDate1 = new java.sql.Date(date1.getTime());
+            java.sql.Date sqlDate2 = new java.sql.Date(date2.getTime());
+
+            preparedStatement.setDate(1, sqlDate1);
+            preparedStatement.setDate(2, sqlDate2);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Employee employee = new Employee();
+
+                employee.setEmpId(resultSet.getInt("empId"));
+                employee.setEmpName(resultSet.getString("empName"));
+                employee.setAddress(resultSet.getString("address"));
+                employee.setPhoneNo(resultSet.getLong("phoneNo"));
+                employee.setGender(resultSet.getString("gender").charAt(0));
+                employee.setDepartment(resultSet.getString("department"));
+                employee.setStartDate(resultSet.getDate("startDate"));
+                employee.setSalary(resultSet.getDouble("salary"));
+
+                employeeList.add(employee);
+            }
+        } catch (SQLException e) {
+        }
+
+        return employeeList;
     }
 }
